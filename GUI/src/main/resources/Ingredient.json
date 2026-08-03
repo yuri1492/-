@@ -1,0 +1,54 @@
+{
+  "ingredients": [
+    {
+      "id": "Flour",
+      "name": "小麦粉",
+      "price": 20
+    },
+    {
+      "id": "Butter",
+      "name": "バター",
+      "price": 30
+    },
+    {
+      "id": "Egg",
+      "name": "卵",
+      "price": 25
+    },
+    {
+      "id": "Milk",
+      "name": "牛乳",
+      "price": 20
+    },
+    {
+      "id": "Sugar",
+      "name": "砂糖",
+      "price": 10
+    },
+    {
+      "id": "Chocolate",
+      "name": "チョコレート",
+      "price": 40
+    },
+    {
+      "id": "RedBeanPaste",
+      "name": "あんこ",
+      "price": 35
+    },
+    {
+      "id": "Sausage",
+      "name": "ソーセージ",
+      "price": 80
+    },
+    {
+      "id": "Cheese",
+      "name": "チーズ",
+      "price": 50
+    },
+    {
+      "id": "Ham",
+      "name": "ハム",
+      "price": 60
+    }
+  ]
+}

@@ -1,0 +1,188 @@
+[
+    {
+    "id":"Shokupan",
+    "name": "食パン",
+    "price": 200,
+    "recipe": {
+        "recipe": [
+        {
+            "ingredientId": "Flour",
+            "quantity": 3
+        },
+        {
+            "ingredientId": "Milk",
+            "quantity": 1
+        }
+        ]
+    }
+    },
+    {
+    "id":"RollBread",
+    "name": "ロールパン",
+    "price": 210,
+    "recipe": {
+        "recipe": [
+        {
+            "ingredientId": "Flour",
+            "quantity": 2
+        },
+        {
+            "ingredientId": "Milk",
+            "quantity": 1
+        },
+        {
+            "ingredientId": "Butter",
+            "quantity": 1
+        }
+        ]
+    }
+    },
+    {
+    "id":"MelonPan",
+    "name": "メロンパン",
+    "price": 240,
+    "recipe": {
+        "recipe": [
+        {
+            "ingredientId": "Flour",
+            "quantity": 2
+        },
+        {
+            "ingredientId": "Egg",
+            "quantity": 1
+        },
+        {
+            "ingredientId": "Sugar",
+            "quantity": 2
+        },
+        {
+            "ingredientId": "Butter",
+            "quantity": 1
+        }
+        ]
+    }
+    },
+    {
+    "id":"Anpan",
+    "name": "あんぱん",
+    "price": 210,
+    "recipe": {
+        "recipe": [
+        {
+            "ingredientId": "Flour",
+            "quantity": 2
+        },
+        {
+            "ingredientId": "RedBeanPaste",
+            "quantity": 1
+        }
+        ]
+    }
+    },
+    {
+    "id":"ChocoCornet",
+    "name": "チョココロネ",
+    "price": 230,
+    "recipe": {
+        "recipe": [
+        {
+            "ingredientId": "Flour",
+            "quantity": 2
+        },
+        {
+            "ingredientId": "Chocolate",
+            "quantity": 1
+        }
+        ]
+    }
+    },
+    {
+    "id":"Croissant",
+    "name": "クロワッサン",
+    "price": 260,
+    "recipe": {
+        "recipe": [
+        {
+            "ingredientId": "Flour",
+            "quantity": 2
+        },
+        {
+            "ingredientId": "Butter",
+            "quantity": 2
+        }
+        ]
+    }
+    },
+    {
+    "id":"CurryBread",
+    "name": "カレーパン",
+    "price": 230,
+    "recipe": {
+        "recipe": [
+        {
+            "ingredientId": "Flour",
+            "quantity": 2
+        },
+        {
+            "ingredientId": "Butter",
+            "quantity": 1
+        }
+        ]
+    }
+    },
+    {
+    "id":"HotDog",
+    "name": "ホットドック",
+    "price": 320,
+    "recipe": {
+        "recipe": [
+        {
+            "ingredientId": "Flour",
+            "quantity": 2
+        },
+        {
+            "ingredientId": "Sausage",
+            "quantity": 1
+        }
+        ]
+    }
+    },
+    {
+    "id":"HamCheeseBread",
+    "name": "ハムチーズパン",
+    "price": 360,
+    "recipe": {
+        "recipe": [
+        {
+            "ingredientId": "Flour",
+            "quantity": 2
+        },
+        {
+            "ingredientId": "Ham",
+            "quantity": 1
+        },
+        {
+            "ingredientId": "Cheese",
+            "quantity": 1
+        }
+        ]
+    }
+    },
+    {
+    "id":"CheeseBread",
+    "name": "チーズパン",
+    "price": 340,
+    "recipe": {
+        "recipe": [
+        {
+            "ingredientId": "Flour",
+            "quantity": 2
+        },
+        {
+            "ingredientId": "Cheese",
+            "quantity": 2
+        }
+        ]
+    }
+    }
+]

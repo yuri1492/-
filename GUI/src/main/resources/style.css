@@ -1,0 +1,471 @@
+.root {
+    -fx-font-family: "Noto Sans CJK JP";
+    -fx-font-size: 16px;
+}
+
+.title {
+    -fx-font-size: 45px;
+    -fx-alignment: center;
+    -fx-text-fill: #5b3210;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.35), 8, 0.3, 2, 2);
+}
+
+.subtitle {
+    -fx-font-size: 35px;
+    -fx-alignment: center;
+    -fx-text-fill: #5b3210;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.35), 8, 0.3, 2, 2);
+}
+
+.titleBackGround {
+    -fx-background-color: rgba(255, 245, 220, 0.8);
+    -fx-background-radius: 20px;
+    -fx-padding: 15px 30px;
+}
+
+.startButton{
+    -fx-font-size: 30px;
+    -fx-background-color: orange;
+    -fx-background-radius: 10px;
+    -fx-text-fill: white;
+    /*-fx-effect: dropshadow(gaussian,rgba(0,0,0,0.35),8,0.3,2,2);
+    */
+}
+
+.startButton:hover {
+    -fx-background-color: #ffae17;
+    -fx-cursor: hand;
+    /*-fx-scale-x: 1.02;
+    -fx-scale-y: 1.02;*/
+}
+
+.startButton:pressed {
+    -fx-background-color: #f09f09;
+}
+
+.okButton{
+    -fx-font-size: 18px;
+    -fx-background-color: orange;
+    -fx-background-radius: 10px;
+    -fx-text-fill: white
+}
+.okButton:hover {
+    -fx-background-color: #ffae17;
+    -fx-cursor: hand;
+    -fx-scale-x: 1.02;
+    -fx-scale-y: 1.02;
+}
+
+.okButton:pressed {
+    -fx-background-color: #f09f09;
+}
+
+
+.nameFieldLabel {
+    -fx-font-size: 20px;
+    -fx-alignment: center;
+    -fx-text-fill: #5b3210;
+}
+
+.nameBackGround {
+    -fx-background-color: rgba(255, 255, 255, 0.8);
+    -fx-background-radius: 20px;
+    -fx-padding: 15px 30px;
+    -fx-text-fill: #5b3210;
+    -fx-effect: dropshadow(gaussian,rgba(53, 53, 53, 0.35),8,0.3,2,2);
+}
+
+.nameFieldButton {
+    -fx-control-inner-background: #FFF8DC;
+    -fx-prompt-text-fill: #5b32109d;
+    -fx-text-fill: #5b3210;
+    -fx-font-size: 18px;
+    -fx-pref-width: 300px;
+    -fx-pref-height: 45px;
+
+    -fx-background-color: rgba(255, 255, 255, 0.9);
+    -fx-background-radius: 11px;
+
+    -fx-border-color: #8B5A2B;
+    -fx-border-width: 2px;
+    -fx-border-radius: 10px;
+
+    -fx-padding: 5px 10px;
+}
+
+.modeLabel {
+    -fx-font-size: 18px;
+    -fx-alignment: center;
+    -fx-border-color: #8B5A2B;
+    -fx-text-fill: #5b3210;
+    -fx-border-width: 2px;
+    -fx-border-radius: 10px;
+    -fx-background-color: rgba(255, 255, 255, 0.9);
+    -fx-background-radius: 10px;
+    -fx-padding: 10px;
+}
+
+.modeButton{
+    -fx-background-color: #b15e1b;
+    -fx-background-radius: 10px;
+    -fx-text-fill: white;
+}
+
+.modeButton:hover {
+    -fx-background-color: #c26b24;
+    -fx-cursor: hand;
+    -fx-scale-x: 1.02;
+    -fx-scale-y: 1.02;
+}
+
+.modeButton:pressed {
+    -fx-background-color: #a35311;
+}
+
+.topLabel {
+    -fx-font-size: 23px;
+    -fx-alignment: center;
+    -fx-text-fill: #5b3210;
+    -fx-padding: 10px;
+}
+
+.gameBackGround{
+    -fx-background-color: rgba(255, 255, 255, 0.75);
+    -fx-border-color: #8B5A2B;
+    -fx-border-width: 2px;
+}
+
+.menuTitleBackGround{
+    -fx-background-color: #f5ba4c;
+    -fx-border-color: #8B5A2B;
+    -fx-border-width: 0px 0px 2px 0px;
+}
+
+.menuTitleLabel {
+    -fx-font-size: 25px;
+    -fx-alignment: center;
+    -fx-text-fill: #5b3210;
+    -fx-padding: 10px;
+}
+
+.menuLabel {
+    -fx-font-size: 18px;
+    -fx-text-fill: #5b3210;
+    -fx-padding: 7px;
+}
+
+.menuLabel:disabled {
+    -fx-text-fill: #704e32;
+    -fx-opacity: 0.8;
+}
+
+.largeMenuLabel {
+    -fx-font-size: 20px;
+    -fx-text-fill: #5b3210;
+    -fx-padding: 4px;
+}
+
+.decideButton {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-background-radius: 0;
+    -fx-border-radius: 0;
+    -fx-text-fill: #5b3210;
+    -fx-font-size: 18px;
+}
+
+.decideButton:hover {
+    -fx-text-fill: #c47a00;
+    -fx-scale-x: 1.04;
+    -fx-scale-y: 1.04;
+}
+
+.decideButton:disabled {
+    -fx-text-fill:#704e32;
+    -fx-opacity: 0.8;
+}
+
+.transparent{
+    -fx-background-color: transparent;
+    -fx-background: transparent;
+}
+
+.transparent > .viewport {
+    -fx-background-color: transparent;
+}
+
+.transparent > .corner {
+    -fx-background-color: transparent;
+}
+
+.logArea{
+    -fx-background-color: rgba(255, 255, 255);
+    -fx-border-color: #8B5A2B;
+    -fx-text-fill: #3d1e04;
+    -fx-border-width: 2px;
+}
+
+.menu {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-background-radius: 0;
+    -fx-border-radius: 0;
+    -fx-text-fill: #5b3210;
+    -fx-font-size: 20px;
+    -fx-padding: 5px;
+}
+
+.menu:hover {
+    -fx-text-fill: #c47a00;
+    -fx-scale-x: 1.02;
+    -fx-scale-y: 1.02;
+}
+
+.popupPane{
+    -fx-background-color: rgba(255, 255, 255);
+    -fx-border-color: #8B5A2B;
+    -fx-text-fill: #3d1e04;
+    -fx-border-width: 2px;
+    -fx-background-radius: 10px;
+    -fx-border-radius: 10px;
+}
+
+.plusMinusButton{
+    -fx-background-color: #b15e1b;
+    -fx-background-radius: 10px;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+.plusMinusButton:hover {
+    -fx-background-color: #c26b24;
+    -fx-cursor: hand;
+    -fx-scale-x: 1.03;
+    -fx-scale-y: 1.03;
+}
+
+.plusMinusButton:pressed {
+    -fx-background-color: #a35311;
+}
+
+.popupTitleLabel {
+    -fx-font-size: 20px;
+    -fx-text-fill: #5b3210;
+    -fx-padding: 5px;
+}
+
+
+.popupLabel {
+    -fx-font-size: 18px;
+    -fx-text-fill: #5b3210;
+    -fx-padding: 3px;
+}
+
+.popupDecideButton:disabled {
+    -fx-font-size: 18px;
+}
+
+.popupDecideButton{
+    -fx-font-size: 18px;
+    -fx-background-color: orange;
+    -fx-background-radius: 10px;
+    -fx-text-fill: white;
+}
+
+.popupDecideButton:hover {
+    -fx-background-color: #ffae17;
+    -fx-cursor: hand;
+    -fx-scale-x: 1.02;
+    -fx-scale-y: 1.02;
+}
+
+.popupDecideButton:pressed {
+    -fx-background-color: #f09f09;
+}
+
+.popupCancelButton{
+    -fx-font-size: 18px;
+    -fx-background-color: #35a0f8;
+    -fx-background-radius: 10px;
+    -fx-text-fill: white;
+}
+
+.popupCancelButton:hover {
+    -fx-background-color: #5eb6fd;
+    -fx-cursor: hand;
+    -fx-scale-x: 1.02;
+    -fx-scale-y: 1.02;
+}
+
+.popupCancelButton:pressed {
+    -fx-background-color: #338dd6;
+}
+
+.totalPriceLabel {
+    -fx-font-size: 18px;
+    -fx-text-fill: #5b3210;
+    -fx-padding: 7px;
+}
+
+.totalPriceLabel:disabled {
+    -fx-text-fill: #c93c32;
+    -fx-opacity: 0.8;
+}
+
+.showTotalPrice{
+    -fx-background-color: rgba(255, 255, 255,0.8);
+    -fx-border-color: #8B5A2B;
+    -fx-text-fill: #3d1e04;
+    -fx-border-width: 2px 0px 0px 0px;
+}
+
+.IngredientButton{
+    -fx-padding: 2px 6px;
+    -fx-font-size: 15px;
+    -fx-background-radius: 5px;
+    -fx-background-color: #b15e1b;
+    -fx-background-radius: 10px;
+    -fx-text-fill: white;
+}
+
+.IngredientButton:hover {
+    -fx-background-color: #c26b24;
+    -fx-cursor: hand;
+    -fx-scale-x: 1.03;
+    -fx-scale-y: 1.03;
+}
+
+.decidType{
+    -fx-background-color: rgba(255, 255, 255,0.5);
+    -fx-border-color: #8B5A2B;
+    -fx-border-width: 0px 0px 2px 0px;
+}
+
+.showInventoryLabel {
+    -fx-font-size: 18px;
+    -fx-text-fill: #5b3210;
+}
+
+.popularityBar {
+    -fx-pref-width: 200px;
+    -fx-pref-height: 20px;
+}
+
+.popularityBar .track {
+    -fx-background-color: #f5e6c8;
+    -fx-border-color: #8B5A2B;
+    -fx-border-width: 2px;
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+}
+
+.popularityBar .bar {
+    -fx-background-color: linear-gradient(#ffe066, #ffb000);
+    -fx-background-radius: 10;
+}
+
+.salesLabel {
+    -fx-font-size: 20px;
+    -fx-text-fill: #5b3210;
+    -fx-padding: 5px;
+}
+
+.salesTopLabel {
+    -fx-font-size: 22px;
+    -fx-text-fill: #5b3210;
+    -fx-padding: 5px;
+}
+
+.endingBackGround{
+    -fx-background-color: rgba(255, 255, 255, 0.75);
+    -fx-border-color: #8B5A2B;
+    -fx-border-width: 2px;
+    -fx-background-radius: 15px;
+    -fx-border-radius: 15px;
+}
+
+.rankLabel {
+    -fx-font-size: 52px;
+    -fx-font-weight: bold;
+    -fx-stroke-width: 2px;
+}
+
+.endingTitle {
+    -fx-font-size: 30px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #5B3210;
+}
+
+.endingMessage {
+    -fx-font-size: 20px;
+    -fx-text-fill: #5B3210;
+}
+
+.rankS {
+    -fx-fill: #FFD700;
+    -fx-stroke: #C89B00;
+    -fx-effect: dropshadow(gaussian, #FFF3A0, 15, 0.6, 0, 0);
+}
+
+.rankA {
+    -fx-fill: #B57EDC;
+    -fx-stroke: #7D4FB3;
+    -fx-effect: dropshadow(gaussian, #D8B8F0, 12, 0.5, 0, 0);
+}
+
+.rankB {
+    -fx-fill: #4A90E2;
+    -fx-stroke: #2F5FA5;
+    -fx-effect: dropshadow(gaussian, #8FC2FF, 10, 0.5, 0, 0);
+}
+
+.rankC {
+    -fx-fill: #4CAF50;
+    -fx-stroke: #2E7D32;
+    -fx-effect: dropshadow(gaussian, #81E784, 8, 0.4, 0, 0);
+}
+
+.rankD {
+    -fx-fill: #FF9800;
+    -fx-stroke: #CC6F00;
+    -fx-effect: dropshadow(gaussian, #FFCC80, 7, 0.4, 0, 0);
+}
+
+.rankE {
+    -fx-fill: #9E9E9E;
+    -fx-stroke: #616161;
+    -fx-effect: dropshadow(gaussian, #D6D6D6, 6, 0.3, 0, 0);
+}
+
+.titleButton {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-background-radius: 0;
+    -fx-border-radius: 0;
+    -fx-text-fill: #5b3210;
+    -fx-font-size: 24px;
+}
+
+.titleButton:hover {
+    -fx-text-fill: #c47a00;
+    -fx-scale-x: 1.04;
+    -fx-scale-y: 1.04;
+}
+
+.workProgress {
+    -fx-pref-width: 400px;
+    -fx-pref-height: 20px;
+}
+
+.workProgress .track {
+    -fx-background-color: #F5E6D3;
+    -fx-background-radius: 10px;
+}
+
+.workProgress .bar {
+    -fx-background-color: linear-gradient(to right,
+        #F5A623,
+        #FFB84D,
+        #FFC966);
+    -fx-background-radius: 10px;
+}

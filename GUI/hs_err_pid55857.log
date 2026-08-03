@@ -1,0 +1,32 @@
+#
+# A fatal error has been detected by the Java Runtime Environment:
+#
+#  SIGSEGV (0xb) at pc=0x00007fda7814bdc3, pid=55857, tid=55880
+#
+# JRE version: OpenJDK Runtime Environment (21.0.11+10) (build 21.0.11+10-1-22.04.2-Ubuntu)
+# Java VM: OpenJDK 64-Bit Server VM (21.0.11+10-1-22.04.2-Ubuntu, mixed mode, sharing, tiered, compressed oops, compressed class ptrs, g1 gc, linux-amd64)
+# Problematic frame:
+# C  [libLLVM-9.so+0x74bdc3]  llvm::Value::getContext() const+0x3
+#
+# Core dump will be written. Default location: Core dumps may be processed with "/wsl-capture-crash %t %E %p %s" (or dumping to /home/omdi19-alt/C_works/JAVA/bakery/GUI/core.55857)
+#
+# If you would like to submit a bug report, please visit:
+#   https://bugs.launchpad.net/ubuntu/+source/openjdk-21
+# The crash happened outside the Java Virtual Machine in native code.
+# See problematic frame for where to report the bug.
+#
+
+---------------  S U M M A R Y ------------
+
+Command Line: --module-path=/home/omdi19-alt/.m2/repository/org/openjfx/javafx-base/21.0.7/javafx-base-21.0.7-linux.jar:/home/omdi19-alt/.m2/repository/org/openjfx/javafx-base/21.0.7/javafx-base-21.0.7.jar:/home/omdi19-alt/.m2/repository/org/openjfx/javafx-controls/21.0.7/javafx-controls-21.0.7-linux.jar:/home/omdi19-alt/.m2/repository/org/openjfx/javafx-controls/21.0.7/javafx-controls-21.0.7.jar:/home/omdi19-alt/.m2/repository/org/openjfx/javafx-fxml/21.0.7/javafx-fxml-21.0.7-linux.jar:/home/omdi19-alt/.m2/repository/org/openjfx/javafx-fxml/21.0.7/javafx-fxml-21.0.7.jar:/home/omdi19-alt/.m2/repository/org/openjfx/javafx-graphics/21.0.7/javafx-graphics-21.0.7-linux.jar:/home/omdi19-alt/.m2/repository/org/openjfx/javafx-graphics/21.0.7/javafx-graphics-21.0.7.jar --add-modules=javafx.base,javafx.controls,javafx.fxml,javafx.graphics Main
+
+Host: Intel(R) Xeon(R) E-2124G CPU @ 3.40GHz, 4 cores, 7G, Ubuntu 22.04.5 LTS
+Time: Thu Jul 30 15:38:52 2026 JST elapsed time: 2.410009 seconds (0d 0h 0m 2s)
+
+---------------  T H R E A D  ---------------
+
+Current thread (0x00007fdb382852d0):  JavaThread "QuantumRenderer-0" [_thread_in_native, id=55880, stack(0x00007fdb1162f000,0x00007fdb1172f000) (1024K)]
+
+Stack: [0x00007fdb1162f000,0x00007fdb1172f000],  sp=0x00007fdb11728da8,  free space=999k
+Native frames: (J=compiled Java code, j=interpreted, Vv=VM code, C=native code)
+C  [libLLVM-9.so+0x74bdc3]  llvm::Value::getContext() const+0x3
