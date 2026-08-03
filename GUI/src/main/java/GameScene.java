@@ -44,6 +44,7 @@ public class GameScene extends BaseScene {
     private final int closeBread = 0;
     private int day = 1;
     private boolean checkPop;
+    private boolean checkBread;
     private final int maxCommand = 6;
     private final int upPopBread = 5;
     private final int upPopNum = 2;
@@ -226,6 +227,7 @@ public class GameScene extends BaseScene {
         displayClear();
         guessCustomer.setText("来客予想：" + shop.getPopularity() + "～" + (shop.getPopularity() + shop.getLevel() * 6) + "人");
         checkPop = false;
+        checkBread = false;
         dayLabel.setText(day + "日目");
         for(BreadType type : shop.getHasBreadRecipe()){
             breadNum.put(type, shop.getInventory().getBread(type));
@@ -251,6 +253,7 @@ public class GameScene extends BaseScene {
             totalBread = shop.getInventory().getTotalBread();
             if(totalBread == 0){
                 addLog("パンがないので、営業ができません！");
+                refreshLog();
             }else{
                 switchMenuLabel(true);
                 Label start = new Label(day + "日目の営業を開始します");
@@ -333,6 +336,7 @@ public class GameScene extends BaseScene {
             shop.addPopularity(upPopNum);
             addLog("商品が" + upPopBread + "種類を超えているので、人気度が" + upPopNum + "上がりました");
         }
+        refreshLog();
         int[] soldCustomer = {0};
 
 
@@ -359,11 +363,13 @@ public class GameScene extends BaseScene {
         centerContent.setAlignment(customerLabel,Pos.TOP_LEFT);
         centerContent.setAlignment(stockLabel,Pos.TOP_CENTER);
         stockLabel.setTranslateY(40);
+        logArea.setScrollTop(Double.MAX_VALUE);
         Timeline timeline = new Timeline(
             new KeyFrame(Duration.millis(350), e -> {
                 int typeInt;
                 BreadType type;
                 for(int i=0;i<customerPerUpdate;i++){
+                    if(shop.getInventory().getTotalBread() == 0) checkBread = true;
                     if(soldCustomer[0] < shop.getSalesHistory().getTodayCustomers()){
                         soldCustomer[0]++;
                         customerLabel.setText("来客人数：" + soldCustomer[0] + "/" + shop.getSalesHistory().getTodayCustomers() + "人");
@@ -403,6 +409,7 @@ public class GameScene extends BaseScene {
                         break;
                     }
                 }
+                //logArea.setScrollTop(Double.MAX_VALUE);
             }));
         timeline.setCycleCount(updateCount + 1);
         timeline.play();
@@ -454,7 +461,26 @@ public class GameScene extends BaseScene {
         expiredStockUnitLabel = new Label[shop.getHasBreadRecipe().size()];
 
         double rate = (double) shop.getSalesHistory().getTodaySoldBread() / totalBread;
-        if(checkPop){
+        if(checkPop && checkBread){
+            if(shop.getSalesHistory().getTodayCustomers() / 2 > totalBread){
+                shop.addPopularity(-3);
+                addLog("商品が少なすぎたので、人気度が3さがりました");
+                if(totalBread == shop.getSalesHistory().getTodaySoldBread()) shop.getSalesHistory().addSoldOut();
+
+            }else{
+                if(totalBread == shop.getSalesHistory().getTodaySoldBread()){
+                    shop.addPopularity(1);
+                    addLog("商品が完売したので、人気度が1あがりました");
+                    shop.getSalesHistory().addSoldOut();
+                } else if (rate >= 0.5) {
+                    addLog("商品が少し売れましたが、人気度は変わりませんでした");
+                    // 変化なし
+                } else {
+                    shop.addPopularity(-2);
+                    addLog("商品があまり売れなかったので、人気度が2下がってしまいました");
+                }
+            }
+        }else if(checkPop || checkBread){
             if(shop.getSalesHistory().getTodayCustomers() / 2 > totalBread){
                 shop.addPopularity(-3);
                 addLog("商品が少なすぎたので、人気度が3さがりました");
@@ -511,7 +537,7 @@ public class GameScene extends BaseScene {
 
         Random random = new Random();
         if(random.nextInt(3) <= 1) shop.addPopularity(random.nextInt(shop.getLevel()) * -1);
-        shop.checkLevel();
+        checkLevel();
         checkRemove = false;
         int indexNum = 0;
         for (Map.Entry<BreadType, Integer> entry : breadNum.entrySet()) {
@@ -543,6 +569,7 @@ public class GameScene extends BaseScene {
             }
         }
 
+        refreshLog();
         showResultBread(stage, gamedata);
     }
 
@@ -753,6 +780,7 @@ public class GameScene extends BaseScene {
                     }
                     addLog(name + "を" + index[0] + "個作成しました");
                 }
+                refreshLog();
                 updateMenuLabel(menuLabel,stockLabel);
                 popupPane.getChildren().clear();
                 getChildren().remove(popupPane);
@@ -960,6 +988,7 @@ public class GameScene extends BaseScene {
                 decideButton.setDisable(totalPrice[0] > shop.getMoney() || totalPrice[0] == 0);
                 updatePartTimeButton();
             }
+            refreshLog();
         });
     }
 
@@ -1173,6 +1202,7 @@ public class GameScene extends BaseScene {
                 if(useMoney(shop.getPromotions().get(index).getCost())){
                     addLog(shop.getPromotions().get(index).getViewMessage());
                     addLog("人気度が" + shop.getPromotions().get(index).getPop() + "あがりました");
+                    refreshLog();
                     addPopularity(shop.getPromotions().get(index).getPop());
                     shop.getSalesHistory().addTodayPromotionCost(shop.getPromotions().get(index).getCost());
                     shop.getPromotions().get(index).setCheck(true);
@@ -1330,15 +1360,18 @@ public class GameScene extends BaseScene {
         haveMoney.setText(String.format("所持金：%,7dG",shop.getMoney()));
         if(!bool){
             addLog("お金が足りません");
+            refreshLog();
         }
         return bool;
     }
 
     public void checkLevel(){
         List<String> logList = shop.checkLevel();
+        shopLevel.setText("店舗レベル：" + shop.getLevel());
         for(String log : logList){
             addLog(log);
         }
+        refreshLog();
     }
 
     public void addPopularity(int num){
@@ -1358,7 +1391,9 @@ public class GameScene extends BaseScene {
         if (logs.size() > 50) {
             logs.remove(0);
         }
+    }
 
+    public void refreshLog() {
         logArea.setText(String.join("\n", logs) + "\n");
 
         Platform.runLater(() -> {
@@ -1376,6 +1411,7 @@ public class GameScene extends BaseScene {
         popupPane.getChildren().clear();
         centerContent.getChildren().clear();
         getChildren().remove(popupPane);
+        refreshLog();
     }
 
     private boolean canMakeAnyBread() {
