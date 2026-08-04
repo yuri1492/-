@@ -63,6 +63,7 @@ public class GameScene extends BaseScene {
     private StackPane topContent;
     private StackPane menuTitleBackGround;
     private StackPane popupPane = new StackPane();
+    private ScrollPane scrollpane;
     private ImageView girlView;
     private TextArea logArea;
     private  HBox resultBox;
@@ -155,6 +156,7 @@ public class GameScene extends BaseScene {
         centerContent.getStyleClass().add("gameBackGround");
         centerContent.setMaxWidth(600);
         centerContent.setMaxHeight(450);
+        centerContent.setPrefSize(600, 450);
         layout.setAlignment(centerContent,Pos.TOP_LEFT);
         leftContent.setMaxHeight(450);
         leftContent.setPrefWidth(200);
@@ -185,6 +187,8 @@ public class GameScene extends BaseScene {
         popupPane.setMaxHeight(600);
         popupPane.setTranslateY(-100);
         popupPane.getStyleClass().add("popupPane");
+        getChildren().add(popupPane);
+        popupPane.setVisible(false);
         Label[] topLabels = {
             dayLabel,
             guessCustomer,
@@ -207,8 +211,8 @@ public class GameScene extends BaseScene {
 
     public void startDay(Stage stage,GameData gamedata){
         // shop.useMoney(2000);
-        // shop.getSalesHistory().addTodaySales(5000000);
-        // checkLevel();
+        shop.getSalesHistory().addTodaySales(5000000);
+        checkLevel();
         // addPopularity(100);
         // int num = 11;
         // shop.getInventory().addBread(BreadType.Shokupan,num);
@@ -616,7 +620,6 @@ public class GameScene extends BaseScene {
             }
             makeButton[i].setOnAction(e -> {
                 popupPane.getChildren().clear();
-                getChildren().remove(popupPane);
                 makeBreadPopup(index,menuLabel,stockLabel);
             });
             menuBox.getChildren().add(menuLabel[i]);
@@ -626,7 +629,9 @@ public class GameScene extends BaseScene {
             check = false;
         }
         contentBox.getChildren().addAll(menuBox,stockBox,priceBox,makeButtonBox);
-        ScrollPane scrollpane = new ScrollPane(contentBox);
+        scrollpane = new ScrollPane(contentBox);
+        scrollpane.setFitToWidth(true);
+        System.out.println(scrollpane.lookup(".viewport"));
         scrollpane.setTranslateY(34);
         scrollpane.setPrefHeight(376);
         scrollpane.setMaxHeight(376);
@@ -635,7 +640,7 @@ public class GameScene extends BaseScene {
     }
 
     public void makeBreadPopup(int menu,Label[] menuLabel,Label[] stockLabel){
-        getChildren().add(popupPane);
+        popupPane.setVisible(true);
         VBox menuBox = new VBox(20);
         menuBox.setPadding(new Insets(20));
         popupPane.getChildren().add(menuBox);
@@ -649,7 +654,7 @@ public class GameScene extends BaseScene {
         Label textNum = new Label("何個作成しますか？");
         textNum.getStyleClass().add("popupLabel");
         menuBox.getChildren().addAll(breadName,breadPrice,breadStock,textNum);
-        final int[] index = {0};
+        final int[] index = {1};
         Label indexLabel = new Label(String.format("%2d",index[0]));
         indexLabel.getStyleClass().add("popupLabel");
         indexLabel.setPrefWidth(30);
@@ -694,7 +699,7 @@ public class GameScene extends BaseScene {
             colonLabel[i].getStyleClass().add("popupLabel");
             colonBox.getChildren().add(colonLabel[i]);
             necessaryNum[i] = shop.getBreads().get(shop.getHasBreadRecipe().get(menu)).getRecipe().getIngredients().get(i).getQuantity();
-            necessaryLabel[i] = new Label(String.format("%3d", 0));
+            necessaryLabel[i] = new Label(String.format("%3d", necessaryNum[i] * index[0]));
             necessaryLabel[i].getStyleClass().add("popupLabel");
             necessaryLabel[i].setPrefWidth(40);
             necessaryBox.getChildren().add(necessaryLabel[i]);
@@ -718,7 +723,7 @@ public class GameScene extends BaseScene {
         ingredientMenuBox.getChildren().addAll(ingredientBox,colonBox,necessaryBox,slashBox,inventoryBox);
         menuBox.getChildren().add(ingredientMenuBox);
         minusButton.setOnAction(e -> {
-            index[0] = Math.max(index[0]-1,0);
+            index[0] = Math.max(index[0]-1,1);
             indexLabel.setText(String.format("%2d",index[0]));
             for(int i=0;i<recipeSize;i++){
                 necessaryLabel[i].setText(String.format("%3d", necessaryNum[i] * index[0]));
@@ -734,7 +739,7 @@ public class GameScene extends BaseScene {
             decideButton.setDisable(index[0] == 0||index[0] > finalCanMakeBread);
         });
         minusTenButton.setOnAction(e -> {
-            index[0] = Math.max(index[0]-10,0);
+            index[0] = Math.max(index[0]-10,1);
             indexLabel.setText(String.format("%2d",index[0]));
             for(int i=0;i<recipeSize;i++){
                 necessaryLabel[i].setText(String.format("%3d", necessaryNum[i] * index[0]));
@@ -783,12 +788,11 @@ public class GameScene extends BaseScene {
                 refreshLog();
                 updateMenuLabel(menuLabel,stockLabel);
                 popupPane.getChildren().clear();
-                getChildren().remove(popupPane);
             }
         });
         cancelButton.setOnAction(e -> {
             popupPane.getChildren().clear();
-            getChildren().remove(popupPane);
+            popupPane.setVisible(false);
         });
         menuBox.getChildren().add(buttonBox);
     }
@@ -970,6 +974,7 @@ public class GameScene extends BaseScene {
         decideButton.setOnAction(e -> {
             if(totalPrice[0] > shop.getMoney()){
                 addLog("お金が足りません");
+                refreshLog();
             }else{
                 for(int i=0;i<shop.getHasIngredientType().size(); i++){
                     if(buyNum[i]!=0){
@@ -987,8 +992,8 @@ public class GameScene extends BaseScene {
                 totalPriceLabel.setDisable(totalPrice[0] > shop.getMoney());
                 decideButton.setDisable(totalPrice[0] > shop.getMoney() || totalPrice[0] == 0);
                 updatePartTimeButton();
+                refreshLog();
             }
-            refreshLog();
         });
     }
 
@@ -1062,7 +1067,7 @@ public class GameScene extends BaseScene {
         }
         contentBox.getChildren().addAll(breadMenuBox,breadStockNumBox,breadStockUnitBox,ingredientMenuBox,ingredientStockNumBox,ingredientStockUnitBox);
         contentBox.setTranslateX(10);
-        ScrollPane scrollpane = new ScrollPane(contentBox);
+        scrollpane = new ScrollPane(contentBox);
         scrollpane.setPrefHeight(331);
         scrollpane.setMaxHeight(331);
         HBox decidTypeLabel = new HBox(200);
@@ -1397,8 +1402,10 @@ public class GameScene extends BaseScene {
         logArea.setText(String.join("\n", logs) + "\n");
 
         Platform.runLater(() -> {
-            logArea.positionCaret(logArea.getLength());
-            logArea.setScrollTop(Double.MAX_VALUE);
+            Platform.runLater(() -> {
+                logArea.positionCaret(logArea.getLength());
+                logArea.setScrollTop(Double.MAX_VALUE);
+            });
         });
     }
 
@@ -1410,8 +1417,8 @@ public class GameScene extends BaseScene {
     public void displayClear(){
         popupPane.getChildren().clear();
         centerContent.getChildren().clear();
-        getChildren().remove(popupPane);
-        refreshLog();
+        logArea.positionCaret(logArea.getLength());
+        logArea.setScrollTop(Double.MAX_VALUE);
     }
 
     private boolean canMakeAnyBread() {
