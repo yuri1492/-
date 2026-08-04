@@ -66,7 +66,7 @@ public class GameScene extends BaseScene {
     private ScrollPane scrollpane;
     private ImageView girlView;
     private TextArea logArea;
-    private  HBox resultBox;
+    private HBox resultBox;
     private VBox resultNameBox;
     private VBox resultNumBox;
     private VBox resultUnitBox;
@@ -631,7 +631,6 @@ public class GameScene extends BaseScene {
         contentBox.getChildren().addAll(menuBox,stockBox,priceBox,makeButtonBox);
         scrollpane = new ScrollPane(contentBox);
         scrollpane.setFitToWidth(true);
-        System.out.println(scrollpane.lookup(".viewport"));
         scrollpane.setTranslateY(34);
         scrollpane.setPrefHeight(376);
         scrollpane.setMaxHeight(376);
@@ -1098,7 +1097,7 @@ public class GameScene extends BaseScene {
         popularityBox.getChildren().addAll(popularityLabel,popularityBar);
         Label shopLebelLabel = new Label("店舗レベル：Lv." + shop.getLevel());
         shopLebelLabel.getStyleClass().add("largeMenuLabel");
-        Label shopLebelStar = new Label("★ ".repeat(shop.getLevel()) + "☆".repeat(5 - shop.getLevel()));
+        Label shopLebelStar = new Label("★ ".repeat(shop.getLevel()) + "☆".repeat(shop.getMaxLevel() - shop.getLevel()));
         shopLebelStar.getStyleClass().add("largeMenuLabel");
         shopLebelStar.setTranslateX(25);
         VBox shopLebelBox = new VBox(0);

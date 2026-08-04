@@ -6,6 +6,7 @@ public class Shop {
     private String name;
     private int money;
     private int level;
+    private final int maxLevel = 5;
     private int popularity; //人気度
     private Inventory inventory;
     private SalesHistory salesHistory;
@@ -48,6 +49,9 @@ public class Shop {
     }
     public int getLevel() {
         return level;
+    }
+    public int getMaxLevel(){
+        return maxLevel;
     }
     public int getPopularity() {
         return popularity;
