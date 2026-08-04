@@ -47,29 +47,6 @@ public class Inventory {
         }
     }
 
-    public void showIngredientStock(Map<IngredientType, Ingredient> ingredients,int maxLength) {
-        System.out.println("===== 所持材料 =====");
-
-        for (Map.Entry<IngredientType, Integer> entry : ingredientStock.entrySet()) {
-            String name = ingredients.get(entry.getKey()).getName();
-            System.out.println(name + " ".repeat(InputOutputManager.repeatNum(maxLength,name.length())) + "：" + String.format("%3d",entry.getValue()) + "個");
-        }
-        System.out.println();
-        InputOutputManager.wait(800);
-    }
-
-    public void showBreadStock(Map<BreadType, Bread> breads,int maxLength,List<BreadType> breadList) {
-        System.out.println("====== パン在庫 ======");
-
-        for (Map.Entry<BreadType, Integer> entry : breadStock.entrySet()) {
-            String name = breads.get(entry.getKey()).getName();
-            System.out.println(name + " ".repeat(InputOutputManager.repeatNum(maxLength,name.length())) + "：" + String.format("%2d",entry.getValue()) + "個");
-        }
-        System.out.println("合計：" + getTotalBread() + "個");
-        System.out.println();
-        InputOutputManager.wait(800);
-    }
-
     public int getTotalBread() {
         int total = 0;
         for (int count : breadStock.values()) {

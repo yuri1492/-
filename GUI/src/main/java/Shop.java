@@ -77,17 +77,6 @@ public class Shop {
         return levelUpCondition[level].getSales();
     }
 
-    public void ShowShop(){
-        System.out.println("===== 店舗情報 =====");
-        System.out.println("名前：" + name);
-        System.out.println("所持金：" + String.format("%,d", money) + "G");
-        System.out.println("店舗ランク：" + level);
-        System.out.println("人気度：" + popularity + " / 100\n");
-    }
-    public void ShowMoney(){
-        System.out.println("所持金：" + String.format("%,d", money) + "G");
-    }
-
     public void addMoney(int num){
         this.money += num;
     }
