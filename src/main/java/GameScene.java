@@ -211,8 +211,8 @@ public class GameScene extends BaseScene {
 
     public void startDay(Stage stage,GameData gamedata){
         // shop.useMoney(2000);
-        shop.getSalesHistory().addTodaySales(5000000);
-        checkLevel();
+        // shop.getSalesHistory().addTodaySales(5000000);
+        // checkLevel();
         // addPopularity(100);
         // int num = 11;
         // shop.getInventory().addBread(BreadType.Shokupan,num);

@@ -1,3 +1,5 @@
+import java.io.ObjectInputFilter.Config;
+
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
@@ -24,6 +26,7 @@ public class Main extends Application {
         stage.centerOnScreen();
     }
 
+// mvn javafx:run で実行
     public static void main(String[] args) {
         launch(args);
     }
