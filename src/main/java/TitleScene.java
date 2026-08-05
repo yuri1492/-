@@ -1,21 +1,14 @@
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
-import javafx.scene.Scene;
-import javax.swing.border.Border;
-import javax.swing.plaf.LabelUI;
-import javax.swing.text.LabelView;
 
 import javafx.geometry.Pos;
 import javafx.geometry.Insets;
-import javafx.scene.text.Font;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.*;
-import javafx.scene.shape.Rectangle;
 import javafx.animation.Animation;
 import javafx.animation.ScaleTransition;
 import javafx.util.Duration;
-import javafx.animation.TranslateTransition;
 
 
 public class TitleScene extends BaseScene {

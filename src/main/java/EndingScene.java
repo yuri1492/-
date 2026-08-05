@@ -1,28 +1,19 @@
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.text.Font;
 import javafx.scene.layout.*;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 import javafx.scene.text.Text;
-import javax.swing.border.Border;
-import javax.swing.plaf.LabelUI;
-import javax.swing.text.LabelView;
-import javafx.animation.PauseTransition;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.animation.KeyValue;
 import javafx.geometry.Pos;
-import javafx.geometry.Insets;
 import javafx.animation.Animation;
 import javafx.animation.ScaleTransition;
 import javafx.util.Duration;
-import javafx.animation.TranslateTransition;
 
 import java.util.Map;
-import java.util.LinkedHashMap;
 
 public class EndingScene extends BaseScene {
     EndingScene(Stage stage,GameData gamedata,Shop shop,int day,Map<BreadType, Bread> breads){

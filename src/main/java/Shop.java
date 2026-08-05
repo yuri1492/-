@@ -139,7 +139,7 @@ public class Shop {
                         inventory.addBreadType(type);
                     }
                 }
-                for(IngredientType type : levelUpCondition[i].getReleaIngredient()){
+                for(IngredientType type : levelUpCondition[i].getReleaseIngredient()){
                     if(type != null){
                         addHasIngredientType(type);
                         inventory.addIngredientType(type);

@@ -1,13 +1,13 @@
 public class LevelUpCondition {
     private int sales;
     private BreadType[] releaseBread;
-    private IngredientType[] releaIngredient;
+    private IngredientType[] releaseIngredient;
     private Promotion promotion;
 
-    LevelUpCondition(int sales,BreadType[] releaseBread,IngredientType[] releIngredient,Promotion promotion){
+    LevelUpCondition(int sales,BreadType[] releaseBread,IngredientType[] releseIngredient,Promotion promotion){
         this.sales = sales;
         this.releaseBread = releaseBread;
-        this.releaIngredient = releIngredient;
+        this.releaseIngredient = releseIngredient;
         this.promotion = promotion;
     }
 
@@ -17,8 +17,8 @@ public class LevelUpCondition {
     public BreadType[] getReleaseBread(){
         return releaseBread;
     }
-    public IngredientType[] getReleaIngredient(){
-        return releaIngredient;
+    public IngredientType[] getReleaseIngredient(){
+        return releaseIngredient;
     }
     public Promotion getPromotion(){
         return promotion;
