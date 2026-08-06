@@ -1,11 +1,15 @@
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 
 import javafx.geometry.Pos;
 import javafx.geometry.Insets;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.*;
+
+import java.nio.charset.StandardCharsets;
+
 import javafx.animation.Animation;
 import javafx.animation.ScaleTransition;
 import javafx.util.Duration;
@@ -123,12 +127,21 @@ public class TitleScene extends BaseScene {
             }
             modeLabel.setText(modes[index[0]].getName());
         });
-
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.getDialogPane().getStylesheets().add(getClass().getResource("/style.css").toExternalForm());
+        alert.setHeaderText(null);
+        alert.setGraphic(null);
         okButton.setOnAction(e -> {
-            if(nameField.getText().trim().isEmpty()){
-                gamedata.setName("まちのパン屋さん");
+            if(isValidName(nameField.getText())){
+                if(nameField.getText().trim().isEmpty()){
+                    gamedata.setName("まちのパン屋さん");
+                }else{
+                    gamedata.setName(nameField.getText());
+                }
             }else{
-                gamedata.setName(nameField.getText());
+                alert.setContentText("店名は全角8文字、または半角12文字以内で入力してください。");
+                alert.showAndWait();
+                return;
             }
             gamedata.setMode(modes[index[0]]);
             stage.setTitle("パン屋物語（" + gamedata.getMode().getName() + "）");
@@ -141,5 +154,25 @@ public class TitleScene extends BaseScene {
 
         layout.setCenter(content);
 
+    }
+
+    private boolean isValidName(String name) {
+        if (name.trim().isEmpty()) {
+            return true;
+        }
+
+        float length = 0;
+
+        for (char c : name.toCharArray()) {
+            if (c <= 0x7F) {
+                // ASCII文字（半角英数字・記号）
+                length += 1;
+            } else {
+                // それ以外（日本語など）
+                length += 1.5;
+            }
+        }
+
+        return length <= 12;
     }
 }

@@ -122,6 +122,15 @@
     -fx-background-color: #a35311;
 }
 
+.dialog-pane {
+    -fx-font-family: "Noto Sans CJK JP";
+    -fx-background-color: #FFF8E8;
+}
+
+.dialog-pane .button {
+    -fx-font-size: 16px;
+}
+
 .topLabel {
     -fx-font-size: 23px;
     -fx-alignment: center;

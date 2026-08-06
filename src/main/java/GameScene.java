@@ -90,6 +90,15 @@ public class GameScene extends BaseScene {
         startSalesButton,
         doPartButton
     };
+    private final PartTime[] partTime = {
+        new PartTime(35,"近所のお花屋さんから","配達の手伝いを頼まれました","配達中...","配達が完了しました！",500,-1,"営業を休んだため、人気度が1さがりました"),
+        new PartTime(25,"人気ベーカリーから","パン作りの手伝いを頼まれました","パン作り中...","パン作りを手伝いました！",700,0,""),
+        new PartTime(20,"近所のカフェから","接客スタッフを頼まれました","接客中...","接客が完了しました！",600,1,"笑顔が人気になり、人気度が1あがりました"),
+        new PartTime(15,"近くのスーパーから","試食販売の手伝いを頼まれました","試食販売中...","試食販売は大成功！",900,2,"多くの人にお店を知ってもらい、人気度が2あがりました"),
+        new PartTime(5,"パンフェスティバルで","販売スタッフを募集しています","イベント販売中...","イベントは大盛況！",1500,3,"あなたの活躍が話題となり、人気度が5あがりました")
+    };
+    private int partType;
+    private Random random = new Random();
 
     public GameScene(Stage stage,GameData gamedata) {
         DataLoader loader = new DataLoader();
@@ -161,12 +170,17 @@ public class GameScene extends BaseScene {
         menuTitle.getStyleClass().add("menuTitleLabel");
         menuTitleBackGround.getChildren().add(menuTitle);
         centerContent.setAlignment(menuTitleBackGround,Pos.TOP_LEFT);
-        hbox = new HBox(20);
+        hbox = new HBox(0);
         vbox = new VBox(20);
         dayLabel = new Label(day + "日目");
+        dayLabel.setPrefWidth(100);
         guessCustomer = new Label("来客予想：" + shop.getPopularity() + "～" + (shop.getPopularity() + shop.getLevel() * 6) + "人");
+        guessCustomer.setPrefWidth(270);
         haveMoney = new Label(String.format("所持金：%,7dG",shop.getMoney()));
+        haveMoney.setPrefWidth(250);
+        haveMoney.setAlignment(Pos.CENTER_LEFT);
         shopName = new Label(shop.getName());
+        shopName.setPrefWidth(220);
         shopLevel = new Label("店舗レベル：" + shop.getLevel());
         hbox.getChildren().addAll(shopName,dayLabel,haveMoney,shopLevel,guessCustomer);
         topContent.getChildren().add(hbox);
@@ -219,6 +233,15 @@ public class GameScene extends BaseScene {
         // shop.getInventory().addBread(BreadType.Anpan,num);
         shop.getSalesHistory().resetTodaydata();
         resetPromotion();
+        int probability = random.nextInt(100);
+        int allProbability = 0;
+        for(int i=0;i<partTime.length;i++){
+            allProbability += partTime[i].getProbability();
+            if(probability < allProbability){
+                partType = i;
+                break;
+            }
+        }
         switchMenuLabel(false);
         displayClear();
         guessCustomer.setText("来客予想：" + shop.getPopularity() + "～" + (shop.getPopularity() + shop.getLevel() * 6) + "人");
@@ -248,6 +271,7 @@ public class GameScene extends BaseScene {
         startSalesButton.setOnAction(e -> {
             totalBread = shop.getInventory().getTotalBread();
             if(totalBread == 0){
+                if(scrollpane!=null) closePopup();
                 addLog("パンがないので、営業ができません！");
                 refreshLog();
             }else{
@@ -272,8 +296,9 @@ public class GameScene extends BaseScene {
         displayClear();
 
         addLog(day + "日目の営業を開始しました");
-        Random random = new Random();
-        shop.getSalesHistory().setTodayCustomers(shop.getPopularity() + random.nextInt(shop.getLevel() * 6));
+        int customers = shop.getPopularity() + random.nextInt(shop.getLevel() * 6);
+        if(customers == 0) customers = 1;
+        shop.getSalesHistory().setTodayCustomers(customers);
         salesBread = new LinkedHashMap<>();
         breadList = new ArrayList<>();
         int breadSize = shop.getHasBreadRecipe().size();
@@ -532,7 +557,6 @@ public class GameScene extends BaseScene {
         shop.getSalesHistory().updateHighSalses(shop.getSalesHistory().getTodaySales(), day);
 
         Random random = new Random();
-        if(random.nextInt(3) <= 1) shop.addPopularity(random.nextInt(shop.getLevel()) * -1);
         checkLevel();
         checkRemove = false;
         int indexNum = 0;
@@ -669,11 +693,11 @@ public class GameScene extends BaseScene {
         Label ingredientTitle = new Label("必要食材");
         ingredientTitle.getStyleClass().add("popupLabel");
         menuBox.getChildren().addAll(choiceBox,ingredientTitle);
-        VBox ingredientBox = new VBox(20);
-        VBox colonBox = new VBox(20);
-        VBox necessaryBox = new VBox(20);
-        VBox slashBox = new VBox(20);
-        VBox inventoryBox = new VBox(20);
+        VBox ingredientBox = new VBox(5);
+        VBox colonBox = new VBox(5);
+        VBox necessaryBox = new VBox(5);
+        VBox slashBox = new VBox(5);
+        VBox inventoryBox = new VBox(5);
         int recipeSize = shop.getBreads().get(shop.getHasBreadRecipe().get(menu)).getRecipe().getIngredients().size();
         Label[] ingredientLabel = new Label[recipeSize];
         Label[] colonLabel = new Label[recipeSize];
@@ -747,7 +771,11 @@ public class GameScene extends BaseScene {
         });
         final int num  = Math.min(canMakeBread,99-shop.getInventory().getBread(shop.getHasBreadRecipe().get(menu)));
         maxButton.setOnAction(e -> {
-            index[0] = num;
+            if(num == 0){
+                index[0] = 1;
+            }else{
+                index[0] = num;
+            }
             indexLabel.setText(String.format("%2d",index[0]));
             for(int i=0;i<recipeSize;i++){
                 necessaryLabel[i].setText(String.format("%3d", necessaryNum[i] * index[0]));
@@ -771,6 +799,7 @@ public class GameScene extends BaseScene {
                     addLog("食材が足りなくて、" + name + "を作成できませんでした");
                 }else{
                     shop.getInventory().addBread(shop.getHasBreadRecipe().get(menu),index[0]);
+                    shop.getSalesHistory().addMakeBread(shop.getHasBreadRecipe().get(menu),index[0]);
                     for(RecipeIngredient recipe : shop.getBreads().get(shop.getHasBreadRecipe().get(menu)).getRecipe().getIngredients()){
                         shop.getInventory().useIngredient(recipe.getIngredientId(), recipe.getQuantity() * index[0]);
                     }
@@ -778,12 +807,11 @@ public class GameScene extends BaseScene {
                 }
                 refreshLog();
                 updateMenuLabel(menuLabel,stockLabel);
-                popupPane.getChildren().clear();
+                closePopup();
             }
         });
         cancelButton.setOnAction(e -> {
-            popupPane.getChildren().clear();
-            popupPane.setVisible(false);
+            closePopup();
         });
         menuBox.getChildren().add(buttonBox);
     }
@@ -1383,7 +1411,9 @@ public class GameScene extends BaseScene {
     }
 
     public void addLog(String message) {
-        logs.add(message);
+        if(!message.isEmpty()){
+            logs.add(message);
+        }
         if (logs.size() > 50) {
             logs.remove(0);
         }
@@ -1406,8 +1436,9 @@ public class GameScene extends BaseScene {
     }
 
     public void displayClear(){
-        popupPane.getChildren().clear();
         centerContent.getChildren().clear();
+        popupPane.getChildren().clear();
+        popupPane.setVisible(false);
         logArea.positionCaret(logArea.getLength());
         logArea.setScrollTop(Double.MAX_VALUE);
     }
@@ -1442,14 +1473,14 @@ public class GameScene extends BaseScene {
         contentBox.getChildren().add(titleLabel);
         contentBox.setMargin(titleLabel, new Insets(0, 0, 60, 0));
         Label[] massages = {
-            new Label("近所のパン屋さんから"),
-            new Label("配達の手伝いを頼まれました")
+            new Label(partTime[partType].getFirstMessage()),
+            new Label(partTime[partType].getSecondMessage())
         };
         for(Label label : massages){
             label.getStyleClass().add("popupLabel");
             contentBox.getChildren().add(label);
         }
-        Label rewardLabel = new Label("報酬：500G");
+        Label rewardLabel = new Label("報酬：" + partTime[partType].getMoneyReward() + "G");
         rewardLabel.getStyleClass().add("popupLabel");
         Button okButton = new Button("[働く]");
         Button cancelButton = new Button("[キャンセル]");
@@ -1463,9 +1494,9 @@ public class GameScene extends BaseScene {
         buttonBox.getChildren().addAll(okButton,cancelButton);
         contentBox.setMargin(buttonBox, new Insets(30, 0, 0, 0));
         contentBox.getChildren().addAll(rewardLabel,buttonBox);
-        getChildren().add(popupPane);
+        popupPane.setVisible(true);
         popupPane.getChildren().add(contentBox);
-        Label label = new Label("配達中...");
+        Label label = new Label(partTime[partType].getRunMessage());
         label.getStyleClass().add("popupTitleLabel");
         Button nextDay = new Button("＜次の日へ＞");
         nextDay.getStyleClass().add("decideButton");
@@ -1489,20 +1520,26 @@ public class GameScene extends BaseScene {
         });
         okButton.setOnAction(e -> {
             popupPane.getChildren().clear();
-            popupPane.getChildren().addAll(okBox);
+            popupPane.getChildren().add(okBox);
             timeline.play();
         });
         cancelButton.setOnAction(e -> {
+            popupPane.setVisible(false);
             displayClear();
             switchMenuLabel(false);
         });
         timeline.setOnFinished(e -> {
             popupPane.getChildren().add(nextDay);
-            label.setText("配達完了");
-            addMoney(500);
-            addLog("アルバイトで500G獲得しました");
+            label.setText(partTime[partType].getEndMessage());
+            addMoney(partTime[partType].getMoneyReward());
+            addLog("アルバイトで" + partTime[partType].getMoneyReward() + "G獲得しました");
+            addLog(partTime[partType].getLogMessage());
+            refreshLog();
+            addPopularity(partTime[partType].getPopularityReward());
+            shop.getSalesHistory().addTotalProfit(0 - shop.getSalesHistory().getTodayCost() - shop.getSalesHistory().getTodayPromotionCost());
         });
         nextDay.setOnAction(e -> {
+            popupPane.setVisible(false);
             nextDay(stage, gamedata);
         });
     }
@@ -1522,5 +1559,14 @@ public class GameScene extends BaseScene {
         getChildren().remove(girlView);
         layout.getChildren().clear();
         setContent(new EndingScene(stage,gamedata,shop,day,breadMap));
+    }
+
+    public void closePopup() {
+        popupPane.getChildren().clear();
+        popupPane.setVisible(false);
+
+        Platform.runLater(() -> {
+            scrollpane.requestFocus();
+        });
     }
 }
