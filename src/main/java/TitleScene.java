@@ -8,8 +8,6 @@ import javafx.geometry.Insets;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.*;
 
-import java.nio.charset.StandardCharsets;
-
 import javafx.animation.Animation;
 import javafx.animation.ScaleTransition;
 import javafx.util.Duration;

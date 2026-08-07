@@ -1,11 +1,19 @@
+import javafx.scene.Cursor;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.layout.*;
+import javafx.scene.shape.ArcTo;
+import javafx.scene.shape.ClosePath;
+import javafx.scene.shape.LineTo;
+import javafx.scene.shape.MoveTo;
+import javafx.scene.shape.QuadCurveTo;
+import javafx.scene.shape.Path;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.application.Platform;
 import javafx.animation.PauseTransition;
@@ -36,8 +44,7 @@ public class GameScene extends BaseScene {
     private final int closeBread = 0;
     private int day = 1;
     private boolean checkPop;
-    private boolean checkBread;
-    private final int maxCommand = 6;
+    private int checkBread = 0;
     private final int upPopBread = 5;
     private final int upPopNum = 2;
     private int totalBread;
@@ -55,8 +62,11 @@ public class GameScene extends BaseScene {
     private StackPane topContent;
     private StackPane menuTitleBackGround;
     private StackPane popupPane = new StackPane();
+    private Pane bubblePane;
+    private Label bubbleMessage;
     private ScrollPane scrollpane;
     private ImageView girlView;
+    private boolean girlClickAble = true;
     private TextArea logArea;
     private HBox resultBox;
     private VBox resultNameBox;
@@ -99,6 +109,8 @@ public class GameScene extends BaseScene {
     };
     private int partType;
     private Random random = new Random();
+    private enum SCENE{startDay,startSales,endDay,doPart}
+    private SCENE scene;
 
     public GameScene(Stage stage,GameData gamedata) {
         DataLoader loader = new DataLoader();
@@ -212,6 +224,97 @@ public class GameScene extends BaseScene {
         doPartButton.setManaged(true);
         layout.setLeft(leftContent);
         getChildren().add(girlView);
+
+        Path bubble = new Path(
+            // 左上
+            new MoveTo(30, 0),
+
+            // 上辺
+            new LineTo(250, 0),
+
+            // 右上角
+            new ArcTo(30, 30, 0, 280, 30, false, true),
+
+            // 右辺
+            new LineTo(280, 60),
+
+            // 右下角
+            new ArcTo(30, 30, 0, 250, 90, false, true),
+
+            // ===== しっぽ =====
+            new LineTo(95, 90),
+            new QuadCurveTo(85, 120, 105, 150),
+            new QuadCurveTo(70, 125, 65, 90),
+            // ================
+
+            // 左下角
+            new LineTo(30, 90),
+            new ArcTo(30, 30, 0, 0, 60, false, true),
+
+            // 左辺
+            new LineTo(0, 30),
+
+            // 左上角
+            new ArcTo(30, 30, 0, 30, 0, false, true),
+
+            new ClosePath()
+        );
+
+        bubble.setFill(Color.WHITE);
+        bubble.setStroke(Color.web("#C48A47"));
+        bubble.setStrokeWidth(2);
+
+        bubblePane = new Pane();
+        bubblePane.setPrefSize(280, 170);
+        bubblePane.setMinSize(280, 170);
+        bubblePane.setMaxSize(280, 170);
+        bubblePane.setMouseTransparent(true);
+
+        bubbleMessage = new Label("パンが足りませんよ！まずは作りましょう♪");
+        bubbleMessage.setPrefWidth(230);
+        bubbleMessage.setPrefHeight(60);
+        bubbleMessage.setLayoutX(25);
+        bubbleMessage.setLayoutY(15);
+        bubbleMessage.setWrapText(true);
+        bubbleMessage.setAlignment(Pos.CENTER);
+        bubbleMessage.getStyleClass().add("bubbleMessage");
+        bubble.getStyleClass().add("speechBubble");
+        bubblePane.getChildren().addAll(bubble,bubbleMessage);
+        bubblePane.setTranslateX(360);
+        bubblePane.setTranslateY(-295);
+
+        getChildren().add(bubblePane);
+        bubblePane.setVisible(false);
+        PauseTransition pause = new PauseTransition(Duration.seconds(2.2));
+        pause.setOnFinished(event -> {
+            bubblePane.setVisible(false);
+            girlClickAble = true;
+        });
+        girlView.setOnMouseClicked(e -> {
+            if (!girlClickAble) {
+                pause.stop();
+                bubblePane.setVisible(false);
+                girlClickAble = true;
+                return;
+            }
+            girlClickAble = false;
+            bubblePane.setVisible(true);
+            bubbleMessage.setText(getMessage());
+            pause.playFromStart();
+        });
+
+        girlView.setOnMouseEntered(e -> {
+            girlView.setScaleX(1.005);
+            girlView.setScaleY(1.005);
+            girlView.setCursor(Cursor.HAND);
+        });
+
+        girlView.setOnMouseExited(e -> {
+            girlView.setScaleX(1.0);
+            girlView.setScaleY(1.0);
+            girlView.setCursor(Cursor.DEFAULT);
+        });
+
         startDay(stage, gamedata);
     }
 
@@ -233,6 +336,7 @@ public class GameScene extends BaseScene {
         // shop.getInventory().addBread(BreadType.Anpan,num);
         shop.getSalesHistory().resetTodaydata();
         resetPromotion();
+        scene = SCENE.startDay;
         int probability = random.nextInt(100);
         int allProbability = 0;
         for(int i=0;i<partTime.length;i++){
@@ -246,8 +350,12 @@ public class GameScene extends BaseScene {
         displayClear();
         guessCustomer.setText("来客予想：" + shop.getPopularity() + "～" + (shop.getPopularity() + shop.getLevel() * 6) + "人");
         checkPop = false;
-        checkBread = false;
-        dayLabel.setText(day + "日目");
+        checkBread = 0;
+        if(day < 100){
+            dayLabel.setText(day + "日目");
+        }else{
+            dayLabel.setText("∞日目");
+        }
         for(BreadType type : shop.getHasBreadRecipe()){
             breadNum.put(type, shop.getInventory().getBread(type));
         }
@@ -294,6 +402,7 @@ public class GameScene extends BaseScene {
 
     public void startSales(Stage stage,GameData gamedata){
         displayClear();
+        scene = SCENE.startSales;
 
         addLog(day + "日目の営業を開始しました");
         int customers = shop.getPopularity() + random.nextInt(shop.getLevel() * 6);
@@ -390,7 +499,7 @@ public class GameScene extends BaseScene {
                 int typeInt;
                 BreadType type;
                 for(int i=0;i<customerPerUpdate;i++){
-                    if(shop.getInventory().getTotalBread() == 0) checkBread = true;
+                    if(shop.getInventory().getTotalBread() == 0) checkBread++;
                     if(soldCustomer[0] < shop.getSalesHistory().getTodayCustomers()){
                         soldCustomer[0]++;
                         customerLabel.setText("来客人数：" + soldCustomer[0] + "/" + shop.getSalesHistory().getTodayCustomers() + "人");
@@ -449,6 +558,7 @@ public class GameScene extends BaseScene {
 
     public void endDay(Stage stage,GameData gamedata){
         displayClear();
+        scene = SCENE.endDay;
         haveMoney.setText(String.format("所持金：%,7dG",shop.getMoney()));
 
         resultNameBox = new VBox(0);
@@ -482,8 +592,8 @@ public class GameScene extends BaseScene {
         expiredStockUnitLabel = new Label[shop.getHasBreadRecipe().size()];
 
         double rate = (double) shop.getSalesHistory().getTodaySoldBread() / totalBread;
-        if(checkPop && checkBread){
-            if(shop.getSalesHistory().getTodayCustomers() / 2 > totalBread){
+        if(checkPop && checkBread > 0){
+            if(shop.getSalesHistory().getTodayCustomers() / 2 > totalBread || checkBread > shop.getSalesHistory().getTodayCustomers()/(float)20){
                 shop.addPopularity(-3);
                 addLog("商品が少なすぎたので、人気度が3さがりました");
                 if(totalBread == shop.getSalesHistory().getTodaySoldBread()) shop.getSalesHistory().addSoldOut();
@@ -501,10 +611,10 @@ public class GameScene extends BaseScene {
                     addLog("商品があまり売れなかったので、人気度が2下がってしまいました");
                 }
             }
-        }else if(checkPop || checkBread){
+        }else if(checkPop || checkBread > 0){
             if(shop.getSalesHistory().getTodayCustomers() / 2 > totalBread){
-                shop.addPopularity(-3);
-                addLog("商品が少なすぎたので、人気度が3さがりました");
+                shop.addPopularity(-2);
+                addLog("商品が少なすぎたので、人気度が2さがりました");
                 if(totalBread == shop.getSalesHistory().getTodaySoldBread()) shop.getSalesHistory().addSoldOut();
 
             }else{
@@ -1466,6 +1576,7 @@ public class GameScene extends BaseScene {
     }
     
     public void doPartTime(Stage stage,GameData gamedata){
+        scene = SCENE.doPart;
         displayClear();
         Label titleLabel = new Label("アルバイト");
         titleLabel.getStyleClass().add("popupTitleLabel");
@@ -1568,5 +1679,121 @@ public class GameScene extends BaseScene {
         Platform.runLater(() -> {
             scrollpane.requestFocus();
         });
+    }
+
+    public String getMessage(){
+        List<String> messageList = new ArrayList<>();
+        String[] morninMessage = {
+            "おはようございます！\n今日も一日頑張りましょう♪",
+            "材料の在庫は大丈夫ですか？",
+            "どんな一日にしようかな？",
+            "開店まで、まだ少し時間がありますよ。",
+        };
+        String[] afterNoonMessage = {
+            "いらっしゃいませ～！",
+            "今日もたくさんのお客さんが来ていますね！",
+            "焼きたてのパンはいかがですか～？",
+            "どんどんパンが売れています！",
+            "この調子で頑張りましょう♪",
+            "お客さんに喜んでもらえると嬉しいですね！",
+            "今日はどのパンが人気かな？",
+            "店内が賑やかになってきましたね♪",
+            "おいしいパンをたくさん用意しておいてよかったです！"
+        };
+        String[] eveningMessage = {
+            "今日も一日、お疲れさまでした！",
+            "無事に営業終了です♪",
+            "今日はどんな一日でしたか？",
+            "明日も頑張りましょう！",
+            "今日もたくさん働きましたね。",
+            "明日はもっとたくさんのお客さんに来てもらいたいですね♪",
+            "ゆっくり休んで、また明日頑張りましょう！",
+            "明日の準備も忘れないようにしましょう。",
+            "今日も素敵なお店でしたよ♪",
+        };
+        String[] partTimeMessages = {
+            "お店のために頑張りましょう♪",
+            "一緒に頑張れば大丈夫です！",
+            "これもお店を続けるためです！",
+            "少しずつ頑張っていきましょう♪",
+            "お店のためなら、ひと頑張りです！",
+            "こういう経験も大事ですよね♪",
+            "今日の経験も、きっと役に立ちますよ！",
+            "頑張った分だけ、お店も成長しますよ♪",
+            "大丈夫です！私もついてますから！",
+            "きっと明日はいい日になりますよ！"
+        };
+        if(scene == SCENE.startDay){
+            for(String str : morninMessage){
+                messageList.add(str);
+            }
+            if(shop.getPopularity() >= 50 && shop.getPopularity() <=80){
+                messageList.add("最近、お客さんが増えてきましたね！");
+            }
+            if(shop.getPopularity() >= 70){
+                messageList.add("この人気を維持したいですね♪");
+            }
+            if(shop.getPopularity() <= 30){
+                messageList.add("宣伝をするとお客さんが増えますよ！");
+            }
+            if(shop.getMoney() <= 400){
+                messageList.add("お金が少なくなっていますね……。");
+                messageList.add("無駄遣いには気を付けましょう！");
+            }
+            if(!canMakeAnyBread() && shop.getMoney() <= 100 && shop.getInventory().getTotalBread() <= closeBread){
+                messageList.add( "お金が少ないですね…\nアルバイトもありますよ！");
+            }else{
+                if(shop.getInventory().getTotalBread() < shop.getPopularity() - shop.getLevel() * 3){
+                    messageList.add("パンが少ないですね。もう少し作っておきましょうか？");
+                }
+                messageList.add("焼きたてのパンをたくさん並べたいですね♪");
+                messageList.add("今日もおいしいパンを作りましょう♪");
+                messageList.add("お客さんが来る前に、しっかり準備しておきましょう！");
+                messageList.add("今日も素敵なパン屋さんにしましょう♪");
+                messageList.add("人気のお店を目指して頑張りましょう！");
+                messageList.add("今日はどのパンを作りますか？");
+            }
+        }
+        if(scene == SCENE.startSales){
+            for(String str : afterNoonMessage){
+                messageList.add(str);
+            }
+            if(shop.getSalesHistory().getTodayCustomers() >= 70){
+                messageList.add("こんなにお客さんが来てくれるなんて嬉しいですね！");
+                messageList.add("町で評判のお店になってきましたね♪");
+            }
+            if(shop.getSalesHistory().getTodayCustomers() <=25){
+                messageList.add("今日はちょっと静かですね……。");
+                messageList.add("もう少しお客さんが来てくれるといいですね。");
+            }
+            if(shop.getInventory().getTotalBread() == 0){
+                messageList.add("完売しました！");
+            }else if(shop.getInventory().getTotalBread() <= shop.getSalesHistory().getTodayCustomers()/(float)10){
+                messageList.add("あっ、パンが少なくなってきました！");
+                messageList.add("このままだと売り切れちゃいそうですね！");
+            }
+        }
+        if(scene == SCENE.endDay){{
+            for(String str : eveningMessage){
+                messageList.add(str);
+            }
+            if(shop.getSalesHistory().getTodaySales() <= shop.getLevel() * 2500){
+                messageList.add("今日は少し厳しい一日でしたね……。");
+                messageList.add("明日はもっと売れるといいですね！");
+            }else if(shop.getSalesHistory().getTodaySales() >= shop.getLevel() * 5000 && shop.getLevel() <= 4 || shop.getSalesHistory().getTodaySales() >= 30000){
+                messageList.add("今日は大繁盛でしたね！");
+                messageList.add("すごい売上です！この調子でいきましょう♪");
+            }
+            if(checkBread > 0){
+                messageList.add("買えなかったお客さんがいたみたいですね...");
+                messageList.add("明日はもう少し在庫を増やしましょう！");
+            }
+        }}
+        if(scene == SCENE.doPart){
+            for(String str : partTimeMessages){
+                messageList.add(str);
+            }
+        }
+        return messageList.get(random.nextInt(messageList.size()));
     }
 }

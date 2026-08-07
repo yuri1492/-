@@ -22,7 +22,7 @@ public class EndingScene extends BaseScene {
             //day  + "日の営業が終了しました",
             //"",
             "=============================",
-            "         エンディング",
+            "エンディング",
             "=============================",
             "店名：" + shop.getName(),
             "",
@@ -44,7 +44,6 @@ public class EndingScene extends BaseScene {
             "来客人数：" + shop.getSalesHistory().getTotalCustomers() + "人",
             "一番売ったパン：" + shop.getSalesHistory().showHighSoldBreadName(breads) + "(" + shop.getSalesHistory().showHighSoldBreadNum(breads) + "個)",
             "一番作ったパン：" + shop.getSalesHistory().showHighMakeBreadName(breads) + "(" + shop.getSalesHistory().showHighMakeBreadNum(breads) + "個)",
-            "",
             "",
             "=============================",
         };

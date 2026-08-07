@@ -83,6 +83,9 @@ public class Shop {
 
     public void addMoney(int num){
         this.money += num;
+        if(this.money > 99999999){
+            this.money = 99999999;
+        }
     }
 
     public boolean useMoney(int num){
